@@ -1,0 +1,106 @@
+openapi: 3.0.1
+info:
+  title: Release Management API
+  version: 1.0.0
+
+paths:
+  /list-operator-releases:
+    get:
+      summary: List AVS application releases a given operator is registered to run.
+      parameters:
+        - name: operatorId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  operatorRequirements:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        applicationName:
+                          type: string
+                        operatorSetId:
+                          type: string
+                        description:
+                          type: string
+                        components:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                              description:
+                                type: string
+                              location:
+                                type: string
+                              latestArtifactId:
+                                type: string
+                              releaseTimestamp:
+                                type: string
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /list-avs-release-keys:
+    get:
+      summary: List AVS release keys
+      parameters:
+        - name: avsId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  avsReleasePublicKeys:
+                    type: array
+                    items:
+                      type: string
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
