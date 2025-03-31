@@ -24,7 +24,7 @@ func NewClient(cfg *Config) (*Client, error) {
 		if env == "" {
 			return nil, fmt.Errorf("no client, url or environment provided")
 		}
-		endpointUrl = getUrlFromEnvironment(cfg.Environment)
+		endpointUrl = getEndpointFromEnvironment(cfg.Environment)
 	}
 
 	client, err := gen.NewClientWithResponses(cfg.EndpointUrl, gen.WithHTTPClient(httpClient))
@@ -93,15 +93,15 @@ func (c *Client) ListOperatorReleases(ctx context.Context, operatorId string) (*
 	}, nil
 }
 
-func getUrlFromEnvironment(environment string) string {
+func getEndpointFromEnvironment(environment string) string {
 	switch environment {
 	case "prod":
-		return "https://api.eigenlayer.xyz/release-management-service/"
+		return "https://api.eigenlayer.xyz/release-management-service"
 	case "preprod":
-		return "https://api.preprod.eigenlayer.xyz/release-management-service/"
+		return "https://api.preprod.eigenlayer.xyz/release-management-service"
 	case "testnet":
-		return "https://api.testnet.eigenlayer.xyz/release-management-service/"
+		return "https://api.testnet.eigenlayer.xyz/release-management-service"
 	default:
-		return "http://localhost:8080/release-management-service/"
+		return "http://localhost:8080/release-management-service"
 	}
 }
