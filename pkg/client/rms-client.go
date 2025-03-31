@@ -9,6 +9,11 @@ import (
 	"github.com/Layr-Labs/release-management-service-client/pkg/model"
 )
 
+type ReleaseManagementServiceClient interface {
+	ListAvsReleaseKeys(ctx context.Context, avsId string) (*model.ListAvsReleaseKeysResponse, error)
+	ListOperatorReleases(ctx context.Context, operatorId string) (*model.ListOperatorRequirementsResponse, error)
+}
+
 type Client struct {
 	api *gen.ClientWithResponses
 }
