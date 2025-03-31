@@ -18,7 +18,7 @@ type Client struct {
 	api *gen.ClientWithResponses
 }
 
-func NewClient(cfg *Config) (*Client, error) {
+func NewClient(cfg *Config) (ReleaseManagementServiceClient, error) {
 	httpClient := cfg.HTTPClient
 	if httpClient == nil {
 		httpClient = &http.Client{Timeout: cfg.Timeout}
