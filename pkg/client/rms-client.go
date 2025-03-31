@@ -42,6 +42,6 @@ func getUrlFromEnvironment(environment string) string {
 	case "testnet":
 		return "https://api.testnet.eigenlayer.xyz/release-management-service/"
 	default:
-		return "http://localhost:2345"
+		return "http://localhost:2345/release-management-service/"
 	}
 }
