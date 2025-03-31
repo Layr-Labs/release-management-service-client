@@ -5,9 +5,9 @@ import (
 	"time"
 )
 
-func NewClientConfig(baseUrl string, environment string, duration time.Duration, client *http.Client) *Config {
+func NewClientConfig(endpointUrl string, environment string, duration time.Duration, client *http.Client) *Config {
 	return &Config{
-		baseUrl,
+		endpointUrl,
 		environment,
 		duration,
 		client,
@@ -15,7 +15,7 @@ func NewClientConfig(baseUrl string, environment string, duration time.Duration,
 }
 
 type Config struct {
-	BaseURL     string
+	EndpointUrl string
 	Environment string
 	Timeout     time.Duration
 	HTTPClient  *http.Client

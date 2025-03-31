@@ -4,12 +4,13 @@ info:
   version: 1.0.0
 
 paths:
-  /list-operator-releases:
+  /operator/{operatorId}/releases:
     get:
+      operationId: listOperatorReleases
       summary: List AVS application releases a given operator is registered to run.
       parameters:
         - name: operatorId
-          in: query
+          in: path
           required: true
           schema:
             type: string
@@ -65,12 +66,14 @@ paths:
                 properties:
                   error:
                     type: string
-  /list-avs-release-keys:
+
+  /avs/{avsId}/release-keys:
     get:
+      operationId: listAvsReleaseKeys
       summary: List AVS release keys
       parameters:
         - name: avsId
-          in: query
+          in: path
           required: true
           schema:
             type: string
