@@ -27,7 +27,7 @@ func NewClient(cfg *Config) (*Client, error) {
 		endpointUrl = getEndpointFromEnvironment(cfg.Environment)
 	}
 
-	client, err := gen.NewClientWithResponses(cfg.EndpointUrl, gen.WithHTTPClient(httpClient))
+	client, err := gen.NewClientWithResponses(endpointUrl, gen.WithHTTPClient(httpClient))
 	if err != nil {
 		return nil, err
 	}
