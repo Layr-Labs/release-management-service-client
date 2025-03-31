@@ -41,12 +41,20 @@ func (c *Client) ListAvsReleaseKeys(ctx context.Context, avsId string) (*model.L
 		return nil, fmt.Errorf("release API request failed: %w", err)
 	}
 
+	if resp == nil {
+		return nil, fmt.Errorf("release API returned a nil response")
+	}
+
 	if resp.StatusCode() != http.StatusOK {
 		return nil, fmt.Errorf("release API returned status %d: %s", resp.StatusCode(), string(resp.Body))
 	}
 
-	if resp.JSON200 == nil || resp.JSON200.AvsReleasePublicKeys == nil {
-		return nil, fmt.Errorf("empty response body from release API")
+	if resp.JSON200 == nil {
+		return nil, fmt.Errorf("release API returned no JSON body")
+	}
+
+	if resp.JSON200.AvsReleasePublicKeys == nil {
+		return &model.ListAvsReleaseKeysResponse{Keys: []string{}}, nil
 	}
 
 	return &model.ListAvsReleaseKeysResponse{
@@ -64,26 +72,33 @@ func (c *Client) ListOperatorReleases(ctx context.Context, operatorId string) (*
 		return nil, fmt.Errorf("release API returned status %d: %s", resp.StatusCode(), string(resp.Body))
 	}
 
-	if resp.JSON200 == nil || resp.JSON200.OperatorRequirements == nil {
-		return nil, fmt.Errorf("empty response body from release API")
+	if resp.JSON200 == nil {
+		return nil, fmt.Errorf("release API returned no data (JSON200 was nil)")
+	}
+
+	if resp.JSON200.OperatorRequirements == nil {
+		return nil, fmt.Errorf("release API returned an empty response body")
 	}
 
 	var result []model.OperatorApplication
 	for _, req := range *resp.JSON200.OperatorRequirements {
 		var components []model.Component
-		for _, c := range *req.Components {
-			components = append(components, model.Component{
-				Name:             *c.Name,
-				Description:      *c.Description,
-				Location:         *c.Location,
-				LatestArtifactId: *c.LatestArtifactId,
-				ReleaseTimestamp: *c.ReleaseTimestamp,
-			})
+		if req.Components != nil {
+			for _, component := range *req.Components {
+				components = append(components, model.Component{
+					Name:             safeStr(component.Name),
+					Description:      safeStr(component.Description),
+					Location:         safeStr(component.Location),
+					LatestArtifactId: safeStr(component.LatestArtifactId),
+					ReleaseTimestamp: safeStr(component.ReleaseTimestamp),
+				})
+			}
 		}
+
 		result = append(result, model.OperatorApplication{
-			ApplicationName: *req.ApplicationName,
-			OperatorSetId:   *req.OperatorSetId,
-			Description:     *req.Description,
+			ApplicationName: safeStr(req.ApplicationName),
+			OperatorSetId:   safeStr(req.OperatorSetId),
+			Description:     safeStr(req.Description),
 			Components:      components,
 		})
 	}
@@ -91,6 +106,13 @@ func (c *Client) ListOperatorReleases(ctx context.Context, operatorId string) (*
 	return &model.ListOperatorRequirementsResponse{
 		OperatorRequirements: result,
 	}, nil
+}
+
+func safeStr(s *string) string {
+	if s == nil {
+		return ""
+	}
+	return *s
 }
 
 func getEndpointFromEnvironment(environment string) string {
