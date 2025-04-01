@@ -1,5 +1,5 @@
 package model
 
-type ListOperatorRequirementsRequest struct {
+type ListReleasesRequest struct {
 	OperatorId string `json:"operatorId"`
 }

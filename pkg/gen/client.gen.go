@@ -88,15 +88,15 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 
 // The interface specification for the client above.
 type ClientInterface interface {
-	// ListAvsReleaseKeys request
-	ListAvsReleaseKeys(ctx context.Context, avsId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// ListReleaseKeys request
+	ListReleaseKeys(ctx context.Context, avsId string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListOperatorReleases request
-	ListOperatorReleases(ctx context.Context, operatorId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// ListReleases request
+	ListReleases(ctx context.Context, operatorId string, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
-func (c *Client) ListAvsReleaseKeys(ctx context.Context, avsId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewListAvsReleaseKeysRequest(c.Server, avsId)
+func (c *Client) ListReleaseKeys(ctx context.Context, avsId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListReleaseKeysRequest(c.Server, avsId)
 	if err != nil {
 		return nil, err
 	}
@@ -107,8 +107,8 @@ func (c *Client) ListAvsReleaseKeys(ctx context.Context, avsId string, reqEditor
 	return c.Client.Do(req)
 }
 
-func (c *Client) ListOperatorReleases(ctx context.Context, operatorId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewListOperatorReleasesRequest(c.Server, operatorId)
+func (c *Client) ListReleases(ctx context.Context, operatorId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListReleasesRequest(c.Server, operatorId)
 	if err != nil {
 		return nil, err
 	}
@@ -119,8 +119,8 @@ func (c *Client) ListOperatorReleases(ctx context.Context, operatorId string, re
 	return c.Client.Do(req)
 }
 
-// NewListAvsReleaseKeysRequest generates requests for ListAvsReleaseKeys
-func NewListAvsReleaseKeysRequest(server string, avsId string) (*http.Request, error) {
+// NewListReleaseKeysRequest generates requests for ListReleaseKeys
+func NewListReleaseKeysRequest(server string, avsId string) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -153,8 +153,8 @@ func NewListAvsReleaseKeysRequest(server string, avsId string) (*http.Request, e
 	return req, nil
 }
 
-// NewListOperatorReleasesRequest generates requests for ListOperatorReleases
-func NewListOperatorReleasesRequest(server string, operatorId string) (*http.Request, error) {
+// NewListReleasesRequest generates requests for ListReleases
+func NewListReleasesRequest(server string, operatorId string) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -230,14 +230,14 @@ func WithBaseURL(baseURL string) ClientOption {
 
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
-	// ListAvsReleaseKeysWithResponse request
-	ListAvsReleaseKeysWithResponse(ctx context.Context, avsId string, reqEditors ...RequestEditorFn) (*ListAvsReleaseKeysResponse, error)
+	// ListReleaseKeysWithResponse request
+	ListReleaseKeysWithResponse(ctx context.Context, avsId string, reqEditors ...RequestEditorFn) (*ListReleaseKeysResponse, error)
 
-	// ListOperatorReleasesWithResponse request
-	ListOperatorReleasesWithResponse(ctx context.Context, operatorId string, reqEditors ...RequestEditorFn) (*ListOperatorReleasesResponse, error)
+	// ListReleasesWithResponse request
+	ListReleasesWithResponse(ctx context.Context, operatorId string, reqEditors ...RequestEditorFn) (*ListReleasesResponse, error)
 }
 
-type ListAvsReleaseKeysResponse struct {
+type ListReleaseKeysResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *struct {
@@ -252,7 +252,7 @@ type ListAvsReleaseKeysResponse struct {
 }
 
 // Status returns HTTPResponse.Status
-func (r ListAvsReleaseKeysResponse) Status() string {
+func (r ListReleaseKeysResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -260,14 +260,14 @@ func (r ListAvsReleaseKeysResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r ListAvsReleaseKeysResponse) StatusCode() int {
+func (r ListReleaseKeysResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
 	return 0
 }
 
-type ListOperatorReleasesResponse struct {
+type ListReleasesResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *struct {
@@ -293,7 +293,7 @@ type ListOperatorReleasesResponse struct {
 }
 
 // Status returns HTTPResponse.Status
-func (r ListOperatorReleasesResponse) Status() string {
+func (r ListReleasesResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -301,40 +301,40 @@ func (r ListOperatorReleasesResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r ListOperatorReleasesResponse) StatusCode() int {
+func (r ListReleasesResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
 	return 0
 }
 
-// ListAvsReleaseKeysWithResponse request returning *ListAvsReleaseKeysResponse
-func (c *ClientWithResponses) ListAvsReleaseKeysWithResponse(ctx context.Context, avsId string, reqEditors ...RequestEditorFn) (*ListAvsReleaseKeysResponse, error) {
-	rsp, err := c.ListAvsReleaseKeys(ctx, avsId, reqEditors...)
+// ListReleaseKeysWithResponse request returning *ListReleaseKeysResponse
+func (c *ClientWithResponses) ListReleaseKeysWithResponse(ctx context.Context, avsId string, reqEditors ...RequestEditorFn) (*ListReleaseKeysResponse, error) {
+	rsp, err := c.ListReleaseKeys(ctx, avsId, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseListAvsReleaseKeysResponse(rsp)
+	return ParseListReleaseKeysResponse(rsp)
 }
 
-// ListOperatorReleasesWithResponse request returning *ListOperatorReleasesResponse
-func (c *ClientWithResponses) ListOperatorReleasesWithResponse(ctx context.Context, operatorId string, reqEditors ...RequestEditorFn) (*ListOperatorReleasesResponse, error) {
-	rsp, err := c.ListOperatorReleases(ctx, operatorId, reqEditors...)
+// ListReleasesWithResponse request returning *ListReleasesResponse
+func (c *ClientWithResponses) ListReleasesWithResponse(ctx context.Context, operatorId string, reqEditors ...RequestEditorFn) (*ListReleasesResponse, error) {
+	rsp, err := c.ListReleases(ctx, operatorId, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseListOperatorReleasesResponse(rsp)
+	return ParseListReleasesResponse(rsp)
 }
 
-// ParseListAvsReleaseKeysResponse parses an HTTP response from a ListAvsReleaseKeysWithResponse call
-func ParseListAvsReleaseKeysResponse(rsp *http.Response) (*ListAvsReleaseKeysResponse, error) {
+// ParseListReleaseKeysResponse parses an HTTP response from a ListReleaseKeysWithResponse call
+func ParseListReleaseKeysResponse(rsp *http.Response) (*ListReleaseKeysResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &ListAvsReleaseKeysResponse{
+	response := &ListReleaseKeysResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
@@ -372,15 +372,15 @@ func ParseListAvsReleaseKeysResponse(rsp *http.Response) (*ListAvsReleaseKeysRes
 	return response, nil
 }
 
-// ParseListOperatorReleasesResponse parses an HTTP response from a ListOperatorReleasesWithResponse call
-func ParseListOperatorReleasesResponse(rsp *http.Response) (*ListOperatorReleasesResponse, error) {
+// ParseListReleasesResponse parses an HTTP response from a ListReleasesWithResponse call
+func ParseListReleasesResponse(rsp *http.Response) (*ListReleasesResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &ListOperatorReleasesResponse{
+	response := &ListReleasesResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}

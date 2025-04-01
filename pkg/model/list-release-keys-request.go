@@ -1,5 +1,5 @@
 package model
 
-type ListAvsReleaseKeysRequest struct {
+type ListReleaseKeysRequest struct {
 	AvsId string `json:"avsId"`
 }

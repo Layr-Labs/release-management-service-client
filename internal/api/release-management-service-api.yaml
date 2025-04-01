@@ -6,7 +6,7 @@ info:
 paths:
   /operator/{operatorId}/releases:
     get:
-      operationId: listOperatorReleases
+      operationId: ListReleases
       summary: List AVS application releases a given operator is registered to run.
       parameters:
         - name: operatorId
@@ -69,7 +69,7 @@ paths:
 
   /avs/{avsId}/release-keys:
     get:
-      operationId: listAvsReleaseKeys
+      operationId: listReleaseKeys
       summary: List AVS release keys
       parameters:
         - name: avsId

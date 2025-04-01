@@ -10,8 +10,8 @@ import (
 )
 
 type ReleaseManagementServiceClient interface {
-	ListAvsReleaseKeys(ctx context.Context, avsId string) (*model.ListAvsReleaseKeysResponse, error)
-	ListOperatorReleases(ctx context.Context, operatorId string) (*model.ListOperatorRequirementsResponse, error)
+	ListReleaseKeys(ctx context.Context, request *model.ListReleaseKeysRequest) (*model.ListReleaseKeysResponse, error)
+	ListReleases(ctx context.Context, request *model.ListReleasesRequest) (*model.ListReleasesResponse, error)
 }
 
 type Client struct {
@@ -40,8 +40,11 @@ func NewClient(cfg *Config) (ReleaseManagementServiceClient, error) {
 	return &Client{api: client}, nil
 }
 
-func (c *Client) ListAvsReleaseKeys(ctx context.Context, avsId string) (*model.ListAvsReleaseKeysResponse, error) {
-	resp, err := c.api.ListAvsReleaseKeysWithResponse(ctx, avsId)
+func (c *Client) ListReleaseKeys(
+	ctx context.Context,
+	request *model.ListReleaseKeysRequest,
+) (*model.ListReleaseKeysResponse, error) {
+	resp, err := c.api.ListReleaseKeysWithResponse(ctx, request.AvsId)
 	if err != nil {
 		return nil, fmt.Errorf("release API request failed: %w", err)
 	}
@@ -59,16 +62,19 @@ func (c *Client) ListAvsReleaseKeys(ctx context.Context, avsId string) (*model.L
 	}
 
 	if resp.JSON200.AvsReleasePublicKeys == nil {
-		return &model.ListAvsReleaseKeysResponse{Keys: []string{}}, nil
+		return &model.ListReleaseKeysResponse{Keys: []string{}}, nil
 	}
 
-	return &model.ListAvsReleaseKeysResponse{
+	return &model.ListReleaseKeysResponse{
 		Keys: *resp.JSON200.AvsReleasePublicKeys,
 	}, nil
 }
 
-func (c *Client) ListOperatorReleases(ctx context.Context, operatorId string) (*model.ListOperatorRequirementsResponse, error) {
-	resp, err := c.api.ListOperatorReleasesWithResponse(ctx, operatorId)
+func (c *Client) ListReleases(
+	ctx context.Context,
+	request *model.ListReleasesRequest,
+) (*model.ListReleasesResponse, error) {
+	resp, err := c.api.ListReleasesWithResponse(ctx, request.OperatorId)
 	if err != nil {
 		return nil, fmt.Errorf("release API request failed: %w", err)
 	}
@@ -85,7 +91,7 @@ func (c *Client) ListOperatorReleases(ctx context.Context, operatorId string) (*
 		return nil, fmt.Errorf("release API returned an empty response body")
 	}
 
-	var result []model.OperatorApplication
+	var result []model.Application
 	for _, req := range *resp.JSON200.OperatorRequirements {
 		var components []model.Component
 		if req.Components != nil {
@@ -100,17 +106,15 @@ func (c *Client) ListOperatorReleases(ctx context.Context, operatorId string) (*
 			}
 		}
 
-		result = append(result, model.OperatorApplication{
-			ApplicationName: safeStr(req.ApplicationName),
-			OperatorSetId:   safeStr(req.OperatorSetId),
-			Description:     safeStr(req.Description),
-			Components:      components,
+		result = append(result, model.Application{
+			Name:          safeStr(req.ApplicationName),
+			OperatorSetId: safeStr(req.OperatorSetId),
+			Description:   safeStr(req.Description),
+			Components:    components,
 		})
 	}
 
-	return &model.ListOperatorRequirementsResponse{
-		OperatorRequirements: result,
-	}, nil
+	return &model.ListReleasesResponse{Releases: result}, nil
 }
 
 func safeStr(s *string) string {
